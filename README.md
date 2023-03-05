@@ -1,17 +1,19 @@
 This is a fork of the MicroPython project to allow deep sleeping and waking
-from the internal real time clock of the Raspberry Pico.
+from the internal real time clock of the Raspberry Pico W.
 
-This can be built with the following commands:
+This can be built for Pico W with the following commands:
 
 ```bash
-git clone https://github.com/ghubcoder/micropython-pico-deepsleep.git
+git clone https://github.com/bjoerge/micropython-pico-deepsleep.git
 cd micropython-pico-deepsleep/
-make -C mpy-cross/
-git submodule update --init -- lib/pico-sdk
-git submodule update --init -- lib/pico-extras
-git submodule update --init -- lib/tinyusb
-cd ports/rp2sleep
-make -j4
+git submodule update --init
+(cd lib/pico-sdk && git submodule update --init)
+(cd lib/pico-extras && git submodule update --init)
+make -C ports/rp2 BOARD=PICO_W submodules
+make -C mpy-cross
+cd ports/rp2/build-PICO_W
+cmake -DMICROPY_BOARD=PICO_W ..
+make
 ```
 
 This will create a `firmware.uf2` file which can then be loaded onto your
